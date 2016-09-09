@@ -1,0 +1,78 @@
+//============================================================================
+// Name        : FaceDetect.cpp
+// Author      : KenKoko
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+#include <ros/ros.h>
+
+#include "opencv2/objdetect.hpp"
+#include "opencv2/videoio.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/core.hpp"
+#include <iostream>
+#include <stdio.h>
+#include <string>
+
+#include "Core/DataHandler.h"
+#include "Core/FaceRecognition.h"
+#include "Core/FaceDetector.h"
+
+using namespace std;
+using namespace cv;
+int main(int argc, char** argv)
+{
+	cout << "FaceDetectA" << endl; // prints FaceDetect
+
+		VideoCapture capture;
+	    Mat frame;
+	    DataHandler handler = DataHandler("Database/face");
+
+	    FaceDetector dtor1 = FaceDetector(handler.LoadData());
+	    dtor1.Training();
+	    //-- 2. Read the video stream
+	    capture.open( -1 );
+	    if ( ! capture.isOpened() ) { printf("--(!)Error opening video capture\n"); return -1; }
+
+	    while ( capture.read(frame) )
+	    {
+	        if( frame.empty() )
+	        {
+	            printf(" --(!) No captured frame -- Break!");
+	            break;
+	        }
+
+	        //-- 3. Apply the classifier to the frame
+	        FaceRecognition recog(frame);
+	        try {
+		        recog.detectAndDisplay(dtor1);
+	        }
+	        catch (const char* msg){
+	        	cerr << msg << endl;
+	        }
+
+	        //-- bail out if escape was pressed
+	        int c = waitKey(10);
+	        if( (char)c == 27 ) { break; }
+	    }
+	    destroyAllWindows();
+	    waitKey(1000);
+	    dtor1.GiveUtor().UpdateData(handler);
+/*
+	    frame = imread("Test/test1.jpg");
+	    FaceRecognition recog(frame);
+		try {
+			recog.detectAndDisplay(dtor1);
+		}
+		catch (const char* msg){
+			cerr << msg << endl;
+		}
+
+		imshow( "Ahihi", frame );
+		waitKey(0);*/
+	return 0;
+}

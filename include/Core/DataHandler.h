@@ -1,0 +1,44 @@
+/*
+ * LoadData.h
+ *
+ *  Created on: Aug 22, 2016
+ *      Author: dung
+ */
+
+#ifndef CORE_DATAHANDLER_H_
+#define CORE_DATAHANDLER_H_
+
+
+#include "../Data/ListFace.h"
+#include "../Data/Face.h"
+#include <ros/package.h>
+
+
+#include "opencv2/objdetect.hpp"
+#include "opencv2/videoio.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/core.hpp"
+#include <iostream>
+#include <stdio.h>
+#include <string>
+#include <sstream>
+#include <stdlib.h>
+#include <fstream>
+
+using namespace cv;
+class DataHandler {
+public:
+	DataHandler(char link[]);
+	void GiveLink(char _link[]);
+	ListFace LoadData();
+	void StoreData(cv::Mat face, String name);
+private:
+	char link[1000];
+	int count;
+	String path = ros::package::getPath("robotvision");
+	
+	
+};
+
+#endif /* CORE_DATAHANDLER_H_ */
