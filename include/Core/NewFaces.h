@@ -33,8 +33,9 @@ public:
 	struct newface {
 			cv::Mat face;
 			double diff;
+			String name;
 	};
-	void AddFace(cv::Mat, double); // Add face and its difference
+	void AddFace(cv::Mat, double, String); // Add face and its difference
 	bool CheckFace(newface); // Check whether new face should or shouldn't add to the array
 	void UpdateData(DataHandler&); // update new face to database
 
@@ -44,6 +45,6 @@ private:
 	int count = 0;
 	
 };
-static double Threshold=400.0;
+static double Threshold=600.0;
 
 #endif /* CORE_NEWFACES_H_ */

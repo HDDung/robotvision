@@ -199,7 +199,7 @@ String FaceDetector::Prediction(Mat Test_Img){
 					return "prediction: " + list.TakeFace(minclas).TakeName();
 				} else {
 					Mat t = norm_0_255(Test_Img).reshape(1, faces[0].rows);
-					this->utor.AddFace(t, mindist);
+					this->utor.AddFace(t, mindist, list.TakeFace(minclas).TakeName());
 					return "unknown";
 				}
 

@@ -26,7 +26,7 @@ using namespace std;
 using namespace cv;
 
 
-#define Threshold 8000
+#define Threshold 6000
 #define Random 397
 
 class FaceDetector {

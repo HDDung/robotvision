@@ -11,11 +11,12 @@ NewFaces::NewFaces() {
 	// TODO Auto-generated constructor stub
 
 }
-void NewFaces::AddFace(cv::Mat face, double diff){
+void NewFaces::AddFace(cv::Mat face, double diff, String name){
 	// Add face
 	newface t;
 	t.diff = diff;
 	t.face = face;
+	t.name = name;
 	if (list.size() <= 50){
 		if (CheckFace(t)){
 				list.push_back(t);
@@ -30,11 +31,22 @@ void NewFaces::AddFace(cv::Mat face, double diff){
 bool NewFaces::CheckFace(newface t){
 	// Check whether new face should or shouldn't add to the array
 	// true: can add; false: cannot add;
-	for (int i = 0; i < list.size(); i++){
-		if (std::fabs(list[i].diff - t.diff) < Threshold){
-			return false;
+	bool test = false;
+	for (int i = 0; i < list.size(); ++i)
+	{
+		if (list[i].name == t.name){
+			test = true;
+			break;
 		}
 	}
+	if (test == true){
+		for (int i = 0; i < list.size(); i++){
+			if (std::fabs(list[i].diff - t.diff) < Threshold && list[i].name == t.name){
+				return false;
+			}
+		}	
+	}
+	
 	return true;
 }
 void NewFaces::UpdateData(DataHandler& handler){
@@ -52,7 +64,7 @@ void NewFaces::UpdateData(DataHandler& handler){
 		waitKey(0);
 		
 		for (; i < list.size() - 1; i++){
-			cout << "What's the name " << i << "face?: " ;
+			cout << "What's the name " << i << " " << list[i].name << " " << list[i].diff  << " face ?: " ;
 			cin >> name; 
 			cout << "the name is " << name <<std::endl;
 			if (name != "0" ){
