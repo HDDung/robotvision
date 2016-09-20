@@ -28,7 +28,9 @@
 #include "Core/FaceDetector.h"
 
 #include "robotvision/ImageCusMess.h"
-
+#include <time.h>
+#define h 280
+#define w 320
 using namespace std;
 using namespace cv;
 
@@ -36,8 +38,8 @@ using namespace cv;
 //Global variable decleartation
 FaceDetector dtor1;
 bool stop = false;
-
-
+time_t start,end;
+int counter;
 void FaceProgessing(const robotvision::ImageCusMessConstPtr& msg)
 {
   try
@@ -50,6 +52,12 @@ void FaceProgessing(const robotvision::ImageCusMessConstPtr& msg)
 
     FaceRecognition recog(frame);
     recog.detectAndDisplay(dtor1);
+
+    time(&end);
+    ++counter;
+    double sec=difftime(end,start);
+    double fps=counter/sec;
+    std::cout << "Hello "<<fps << std::endl;
   }
   catch (cv_bridge::Exception& e)
   {
@@ -63,7 +71,7 @@ int main(int argc, char** argv)
 	// Iniziall state 
   	ros::init(argc, argv, "FaceProgessing");
   	ros::NodeHandle nodehandle;
-
+   
 
 	//std::signal(SIGINT, sigIntHandler);
 
@@ -81,9 +89,12 @@ int main(int argc, char** argv)
 
 
     //-- 2. Read the video stream
-    
+    time(&start);
+    counter=0;
     while (1){
     	ros::Subscriber sub1 = nodehandle.subscribe("camera/FaceDetectImage1", 1, FaceProgessing);
+
+      
 
     	int c = waitKey(10);
     	if( (char)c == 27 || !nodehandle.ok()) {  

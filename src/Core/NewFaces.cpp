@@ -74,7 +74,7 @@ void NewFaces::UpdateData(DataHandler& handler){
 			waitKey(0);
 		}
 
-		cout << "What's the name " << i << "face?: " ;
+		cout << "What's the name " << i << " " << list[i].name << " " << list[i].diff  << " face ?: " ;
 		cin >> name; 
 		cout << "the name is " << name <<std::endl;
 		if (name != "0" ){
